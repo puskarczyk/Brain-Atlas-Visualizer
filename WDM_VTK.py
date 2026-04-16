@@ -1,17 +1,19 @@
 import vtk
 import pandas as pd
+import os
+import pandas as pd
 
 def main():
     colors = vtk.vtkNamedColors()
 
     # Wczytanie danych z atlasu
-    file_name_raw = r"C:\\Users\\Dell\\WDM_VTK\\brain-2017-01\\volumes\\imaging\\A1_grayT1-1mm_resample.nrrd"  # raw data
-    file_name_seg = r"C:\\Users\\Dell\\WDM_VTK\\brain-2017-01\\volumes\\labels\\hncma-atlas.nrrd"  # dane wysegmentowane
-
-    tissues_colors = pd.read_table(
-        r"C:\\Users\\Dell\\WDM_VTK\\brain-2017-01\\colortables\\hncma-atlas-lut.ctbl", comment='#', sep='\\s+'
-    )
-
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    file_name_raw = os.path.join(BASE_DIR, "data", "imaging", "A1_grayT1-1mm_resample.nrrd")
+    file_name_seg = os.path.join(BASE_DIR, "data", "labels", "hncma-atlas.nrrd")
+    ctbl_path = os.path.join(BASE_DIR, "data", "colortables", "hncma-atlas-lut.ctbl")
+    
+    tissues_colors = pd.read_table(ctbl_path, comment='#', sep='\\s+')
+    
     # Tworzenie mapy kolorów
     label_colors = vtk.vtkLookupTable()
     label_colors.SetNumberOfTableValues(len(tissues_colors))
